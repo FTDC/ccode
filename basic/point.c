@@ -3,6 +3,12 @@
 int main(int argc, char const *argv[])
 {
     /* code */
-    printf("sdfwe");
+    char name = 'c';
+
+    char *p = &name;
+
+    *p = 'd';
+
+    printf("char: %c", name);
     return 0;
 }
