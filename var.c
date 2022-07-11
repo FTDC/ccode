@@ -1,1 +1,5 @@
-int g_num = 2022;
+#include  <stdio.h>
+
+int  main(){
+
+}
