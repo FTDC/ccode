@@ -26,7 +26,7 @@ void largestNumber(int *nums, int numsSize)
 int main(int argc, char const *argv[])
 {
     /* code */
-    printf("123: %d", 123);
+    printf("123: d%", 123);
 
     int nums[2] = {10, 2};
 
