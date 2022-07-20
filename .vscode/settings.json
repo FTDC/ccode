@@ -1,4 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "C_Cpp.autocompleteAddParentheses": true
+    "C_Cpp.autocompleteAddParentheses": true,
+    "files.associations": {
+        "typeinfo": "c"
+    }
 }

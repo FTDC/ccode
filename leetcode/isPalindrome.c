@@ -16,18 +16,16 @@
 int main()
 {
 
-  //   _Bool res = isPalindrome(121);
-
   int num = 121;
 
-  int len = sizeof(num) / sizeof(int);
+  // int len = sizeof(num) / sizeof(int);
 
   char a[100];
 
   //这里后面有讲哈。把整数x，转化为字符串存入a中
-  sprintf(a, "%d", x);
+  printf(a, "a的内容：%d \n", num);
 
-  printf("%d \n", len);
+  printf("%s \n", a);
 
   //  printf("%s \n", num);
 
