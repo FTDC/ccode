@@ -3,7 +3,7 @@
 //
 #include <stdio.h>
 
-int mian(){
-    sprintf("werwe");
-    return  0;
+int mian() {
+  printf("werwe");
+  return 0;
 }
