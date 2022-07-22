@@ -19,11 +19,6 @@ bool isValid(char *s) {
     return false;
   }
 
-  // if (s[0] != pairs(slen - 1)) {
-  //   return false;
-  // }
-
-  // int loop = floor(slen / 2);
   int top = 0;
   // 栈结构, 先进后出 ， 匹配最近的一个对称的符号
   char stk[slen];
