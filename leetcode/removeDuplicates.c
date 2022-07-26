@@ -1,30 +1,29 @@
 #include <stdio.h>
 
 int removeDuplicates(int *nums, int numsSize) {
-  int c = numsSize;
 
-  for (int i = 0; i < numsSize; i++) {
-    int start = i;
-    // 如果当前元素和下一个相等
-    if (nums[i] == nums[i + 1]) {
-      while (start < numsSize - 1) {
-        nums[start] = nums[start + 1];
-        printf("%d \n", start);
-        start += 1;
-      }
-      c--;
-    }
+  if (numsSize == 0) {
+    return 0;
   }
-
-  return c;
+  int fast = 1, slow = 1;
+  while (fast < numsSize) {
+    if (nums[fast] != nums[fast - 1]) {
+      nums[slow] = nums[fast];
+      ++slow;
+    }
+    ++fast;
+  }
+  return slow;
 }
 
 int main() {
   int nums[] = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+  //   int nums[] = {1, 2};
 
   int len = sizeof(nums) / sizeof(int);
   int res = removeDuplicates(nums, len);
 
+  printf("%s \n", "结果内容");
   for (int i = 0; i < len; i++) {
     printf("%d \n", nums[i]);
   }

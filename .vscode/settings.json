@@ -3,5 +3,9 @@
     "C_Cpp.autocompleteAddParentheses": true,
     "files.associations": {
         "typeinfo": "c"
+    },
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.customConfigurationVariables": {
+    
     }
 }
