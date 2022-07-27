@@ -3,15 +3,11 @@ project(ccode C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(ccode
-        ccode/test.c
-        ccode/var.c)
 
-add_executable(test ccode/test.c)
-add_executable(bool ccode/bool.c)
-add_executable(gg ccode/gg.c)
-add_executable(calc ccode/basic/calc.c)
-add_executable(int ccode/basic/int.c)
-add_executable(strcpy ccode/basic/strcpy.c)
-add_executable(20220707 ccode/leetcode/20220707.c)
-add_executable(maxNumber ccode/maxNumber.c)
+add_executable(isMatch leetcode/isMatch.c)
+add_executable(getMinimumTime leetcode/getMinimumTime.c)
+add_executable(isSymmetric leetcode/binary_tree/isSymmetric.c)
+add_executable(preorderTraversal leetcode/binary_tree/preorderTraversal.c)
+add_executable(maxDepth leetcode/binary_tree/maxDepth.c)
+add_executable(climbStairs leetcode/climbStairs.c)
+add_executable(leetcode121 leetcode/leetcode121.c)
