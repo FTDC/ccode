@@ -3,39 +3,49 @@
 //
 
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 
+
+/**
+ *  先遍历数组中的元素
+ * @param nums
+ * @param numsSize
+ * @param returnSize
+ * @return
+ */
 
 int *findDisappearedNumbers(int *nums, int numsSize, int *returnSize) {
     int *res = malloc(numsSize * sizeof(int));
 
     int tmp = 0;
     for (int i = 0; i < numsSize; ++i) {
-        if (nums[i] != i) {
-            tmp = nums[i];
-            nums[i] = nums[nums[i]];
-            nums[nums[i]] = tmp;
-        }
-        printf("%d \n", nums[i]);
+//        int index = nums[i] - 1;
+//        if (nums[index] != i) {
+//            tmp = nums[i];
+//            nums[index] = nums[i];
+//            nums[i] = tmp;
+//        }
+//        printf("%d \n", nums[i]);
     }
 
     *returnSize = 0;
 
     for (int i = 0; i < numsSize; ++i) {
-        if (nums[i] == 0) {
-            res[*returnSize++] = i;
-        }
+        printf("num%d:%d \n", i, nums[i]);
+//        if (nums[i] == 0) {
+//            res[*returnSize++] = i;
+//        }
     }
     return res;
 }
 
 int main(int argc, char const *argv[]) {
     int nums[] = {4, 3, 2, 7, 8, 2, 3, 1};
-    int *returnSize;
-    int *res = findDisappearedNumbers(nums, sizeof(nums) / sizeof(int), returnSize);
+    int returnSize = 0;
+//    int *res = findDisappearedNumbers(nums, sizeof(nums) / sizeof(int), &returnSize);
 
-    for (int i = 0; i < *returnSize; i++) {
-        printf("item:%d \n", res[i]);
+    for (int i = 0; i < 8; i++) {
+        printf("item:%d \n", nums[i]);
     }
     return 0;
 }
