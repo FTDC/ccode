@@ -13,22 +13,21 @@
 //   return true;
 // }
 
-int main()
-{
+int main() {
 
-  int num = 121;
+    int num = 121;
 
-  // int len = sizeof(num) / sizeof(int);
+    // int len = sizeof(num) / sizeof(int);
 
-  char a[100];
+    char a[100];
 
-  //这里后面有讲哈。把整数x，转化为字符串存入a中
-  printf(a, "a的内容：%d \n", num);
+    //这里后面有讲哈。把整数x，转化为字符串存入a中
+    printf(a, "a的内容：%d \n", num);
 
-  printf("%s \n", a);
+    printf("%s \n", a);
 
-  //  printf("%s \n", num);
+    //  printf("%s \n", num);
 
-  // printf(" %d \n", res);
-  return 0;
+    // printf(" %d \n", res);
+    return 0;
 }

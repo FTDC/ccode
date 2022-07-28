@@ -26,7 +26,7 @@ typedef struct TreeNode {
 int maxDepth2(struct TreeNode *root) {
     if (root == NULL)
         return 0;
-    return fmax(maxDepth(root->left), maxDepth(root->right)) + 1;
+    return fmax(maxDepth2(root->left), maxDepth2(root->right)) + 1;
 }
 
 struct QueNode {
