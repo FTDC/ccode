@@ -31,12 +31,12 @@ int diameterOfBinaryTree(struct TreeNode *root) {
 
     int count = 0;
     // 从根节点出发
-    while (root->left || root->right){
-        if(root->left != NULL){
+    while (root->left || root->right) {
+        if (root->left != NULL) {
             count++;
             root = root->left;
         }
-        if(root->right != NULL){
+        if (root->right != NULL) {
             count++;
             root = root->right;
         }
