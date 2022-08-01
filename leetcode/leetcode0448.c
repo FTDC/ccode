@@ -15,37 +15,33 @@
  */
 
 int *findDisappearedNumbers(int *nums, int numsSize, int *returnSize) {
-    int *res = malloc(numsSize * sizeof(int));
+    int *res = malloc(*returnSize * sizeof(int));
 
-    int tmp = 0;
+    // 原地哈希， 把1-8 当层key， 如果给这个key 增加了两次说明存在多次 ， 如果不存在则不会增加数字
     for (int i = 0; i < numsSize; ++i) {
-//        int index = nums[i] - 1;
-//        if (nums[index] != i) {
-//            tmp = nums[i];
-//            nums[index] = nums[i];
-//            nums[i] = tmp;
-//        }
-//        printf("%d \n", nums[i]);
+        // 取模是让重复出现的key 加入到正确的位置
+        int x = (nums[i] - 1) % numsSize;
+        nums[x] += numsSize;
     }
 
-    *returnSize = 0;
-
+    // 对比增加个数的元素
     for (int i = 0; i < numsSize; ++i) {
-        printf("num%d:%d \n", i, nums[i]);
-//        if (nums[i] == 0) {
-//            res[*returnSize++] = i;
-//        }
+        if (nums[i] <= 8) {
+            res[(*returnSize)++] = i + 1;
+        }
     }
+
     return res;
 }
 
 int main(int argc, char const *argv[]) {
     int nums[] = {4, 3, 2, 7, 8, 2, 3, 1};
     int returnSize = 0;
-//    int *res = findDisappearedNumbers(nums, sizeof(nums) / sizeof(int), &returnSize);
+    int *res = findDisappearedNumbers(nums, sizeof(nums) / sizeof(int), &returnSize);
 
-    for (int i = 0; i < 8; i++) {
-        printf("item:%d \n", nums[i]);
+    printf("str::%s \n", "-------------------");
+    for (int i = 0; i < returnSize; i++) {
+        printf("item:%d \n", res[i]);
     }
     return 0;
 }

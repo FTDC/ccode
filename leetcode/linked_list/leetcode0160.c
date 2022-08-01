@@ -52,30 +52,28 @@ int main(int argc, char const *argv[]) {
 
 
 /**
- *  判断内容是否设置过
+ *  用双指针pA 、pB循环俩个链表，链表A循环结束就循环链表B，链表A循环结束就循环链表B，当pA == pB时就是交点，因为两个指针移动的步数一样
+ *
  * @param headA
  * @param headB
  * @returnß
  */
 struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
 
-    // 如果链表A和链表B
-    while (headA && headB) {
-        printf("str:: %d \n", headA->val);
-        headA = headA->next;
-
-        printf("str:: %d \n", headB->val);
-        headB = headB->next;
-
-        if(headA== headB){
-            return true;
-        }
+    // 任何一个为空则没有交集
+    if (headA == NULL || headB == NULL) {
+        return NULL;
     }
 
-    return  NULL;
+    // 变量声明是为了存储各自原生表头
+    struct ListNode *pA = headA, *pB = headB;
 
-//    while (headB){
-//        printf("str:: %d \n", headB->val);
-//        headB = headB->next;
-//    }
+    // 如果链表A和链表B 不相等， 声明两个循环完成肯定有结束的时候
+    while (pA != pB) {
+        // 循环一遍如果为NUll ，这只为headB的链表头
+        pA = (pA ? pA->next : headB);
+        pB = (pB ? pB->next : headA);
+    }
+
+    return pA;
 }

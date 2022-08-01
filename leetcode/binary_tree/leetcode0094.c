@@ -25,6 +25,12 @@ typedef struct TreeNode {
 
 
 
+/**
+ *
+ * @param root  根节点
+ * @param res   返回内容
+ * @param returnSize  返回的个数
+ */
 void inorder(struct TreeNode *root, int *res, int *returnSize) {
     if (!root) {
         return;
