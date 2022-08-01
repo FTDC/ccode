@@ -22,7 +22,9 @@ typedef struct ListNode {
  */
 struct ListNode *reverseList(struct ListNode *head) {
 
+    // 记住上一个节点的信息
     struct ListNode *curNode = head, *preNode = NULL;
+
     while (curNode) {
         // 下一個节点
         struct ListNode *nextNode = curNode->next;
