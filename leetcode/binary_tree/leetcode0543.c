@@ -10,12 +10,29 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <math.h>
 
 typedef struct TreeNode {
     int val;
     struct TreeNode *left;
     struct TreeNode *right;
 } Node;
+
+
+/**
+ * 递归遍历树的深度
+ * @param root
+ * @param deep
+ */
+int depth(struct TreeNode *root, int *deep) {
+    if (root == NULL) return 0;
+    // 左边节点的长度
+    int leftLen = depth(root->left, deep);
+    // 右边节点的长度
+    int rightLen = depth(root->right, deep);
+    *deep = fmax(*deep, leftLen + rightLen + 1);
+    return fmax(leftLen, rightLen) + 1;
+}
 
 /**
  * @brief  两结点之间的路径长度
@@ -25,24 +42,11 @@ typedef struct TreeNode {
  * @return false
  */
 int diameterOfBinaryTree(struct TreeNode *root) {
-    if (root == NULL) {
-        return true;
-    }
-
-    int count = 0;
-    // 从根节点出发
-    while (root->left || root->right) {
-        if (root->left != NULL) {
-            count++;
-            root = root->left;
-        }
-        if (root->right != NULL) {
-            count++;
-            root = root->right;
-        }
-    }
-    return count;
+    int deep = 1;
+    depth(root, &deep);
+    return deep - 1;
 }
+
 
 int main(int argc, char const *argv[]) {
 
@@ -73,7 +77,7 @@ int main(int argc, char const *argv[]) {
     treeNode5.left = NULL;
     treeNode5.right = NULL;
 
-    bool res = diameterOfBinaryTree(&treeNode1);
+    int res = diameterOfBinaryTree(&treeNode1);
 
     printf("%d \n", res);
 
