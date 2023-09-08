@@ -12,33 +12,34 @@
 #include <arpa/inet.h>
 #include <signal.h>
 #include <sys/wait.h>
-#include <time.h>
+#include <pthread.h>
 
 #define N 128
-#define TIMEZONE 8
 
 void handler(int sig) {
     // 不在意结束状态值, 则参数 status 可以设成NULL
     wait(NULL);
 }
 
+// 连接标识符
+struct Socket_fd {
+    int fd;
+} SOCK_FD;
+
 // 启动服务端
 int startServer();
 
 // 处理请求
-void handle_request(int client_fd);
-
-char *currentime(struct tm *time);
+void *handle_request(void *arg);
 
 // 错误处理
 void error_die(const char *errMsg);
 
-char *get_current_time_str(struct tm *tm_info);
-
-void handle_request(int client_fd) {
+void *handle_request(void *arg) {
     char buf[N];
+    struct Socket_fd fd = *(struct Socket_fd *) arg;
     // 接收内容的长度, MSG_PEEK： 窥视传入的数据。 数据被复制到缓冲区中，但不会从输入队列中删除。
-    int receive_byte = recv(client_fd, buf, N, 0);
+    int receive_byte = recv(fd.fd, buf, N, 0);
     // if(recvfrom(sockfd, buf, N, 0, (struct sockaddr *)&clientaddr, &addrlen) == -1)
     if (receive_byte == -1) {
         error_die(" recv error");
@@ -52,39 +53,19 @@ void handle_request(int client_fd) {
     // 拼接字符串 ，在结尾增加 *_*
     strcat(buf, " -- *_*");
 
-    if (send(client_fd, buf, strlen(buf), 0) == -1) {
+    if (send(fd.fd, buf, strlen(buf), 0) == -1) {
         error_die("send error");
     }
 
     // 关闭连接
-//    close(client_fd);
+//    close(fd);
 
-//    printf("hostname", gethostname(client_fd, sizeof()))
+//    printf("hostname", gethostname(fd, sizeof()))
 
 }
 
-
 int main(void) {
-    time_t cur_time;
-    struct tm *tm_info;
-
-//    clock_t start_t, mid_t, end_t;
-//
-//    start_t = clock();
-
-    // 秒数
-//    cur_time = time(NULL);
-    time(&cur_time);
-    char *cur_time_str = get_current_time_str(localtime(&cur_time));
-
-    printf(" 当前时间: %s  \n", cur_time_str);
     printf("************** Start Server ****************** \n");
-    printf("************** start %1ld ****************** \n", clock());
-    printf("************** mid Server ****************** \n");
-    printf("************** mid %1ld ****************** \n", clock());
-    printf("************** end Server ****************** \n");
-//    end_t = clock();
-    printf("************** end %1ld ****************** \n", clock());
 
     // 本地服务先启动
     int sockfd = startServer();
@@ -111,17 +92,15 @@ int main(void) {
                ntohs(client_addr.sin_port));
 
         // todo: 使用 fork 函数创建子进程， 父进程负责链接操作， 子进程负责与客户端通信
-        pid_t pid;
-        if ((pid = fork()) < 0) {
-            error_die("fork() fail;");
-        } else if (pid > 0) {
+        pthread_t tid;
 
-        } else {
-            // 处理请求
-            while (1) {
-                handle_request(client_fd);
-            }
+        struct Socket_fd socket_fd = {client_fd};
+
+        if ((tid = pthread_create(&tid, NULL, handle_request, &socket_fd)) != 0) {
+            error_die("fork() fail;");
         }
+        // 线程主动与主控线程断开关系。线程结束后（不会产生僵尸线程），其退出状态不由其他线程获取，而直接自己自动释放（自己清理掉PCB的残留资源）
+        pthread_detach(tid);
 
 
 //        int receive_byte;
@@ -158,16 +137,6 @@ int main(void) {
     close(sockfd);
 
     return 0;
-}
-
-char *get_current_time_str(struct tm *tm_info) {
-    char buffer[80];
-
-//    printf("%d年%d月%d日 %d时%d分%d秒\n ", 1900 + tm_info->tm_year, tm_info->tm_mon + 1, tm_info->tm_mday,
-//           tm_info->tm_hour + TIMEZONE, tm_info->tm_min, tm_info->tm_sec);
-    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-//    printf("格式化的日期 & 时间 : | %s |\n", buffer);
-    return &buffer;
 }
 
 

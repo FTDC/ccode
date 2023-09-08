@@ -5,5 +5,5 @@ cmake-build-debug-wsl/*
 .gitignore
 .idea/*
 .vscode/*
-.vscode/settings.json
+.vscode/settings.js
 *.stackdump

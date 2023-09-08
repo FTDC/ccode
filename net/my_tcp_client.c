@@ -36,10 +36,11 @@ int main() {
         error_die("connect error");
     }
 
-    char buf[1024];
+    char buf[N]="";
 //    time_t now = ctime(NULL);
 
     while (1) {
+
         fgets(buf, N, stdin);
         // end flag
         buf[strlen(buf) - 1] = '\0';
@@ -48,6 +49,7 @@ int main() {
         if (send(client_fd, buf, sizeof(buf), 0) == -1) {
             error_die("send msg error");
         }
+        printf("send msgr: %s\n", buf);
 
         // receive message
         char receive_msg[N] = "";
