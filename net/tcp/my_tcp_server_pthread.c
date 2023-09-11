@@ -22,8 +22,9 @@ void handler(int sig) {
 }
 
 // 连接标识符
-struct Socket_fd {
-    int fd;
+struct Socket_connect {
+    struct sockaddr_in addr;
+    int acceptfd;
 } SOCK_FD;
 
 // 启动服务端
@@ -37,30 +38,40 @@ void error_die(const char *errMsg);
 
 void *handle_request(void *arg) {
     char buf[N];
-    struct Socket_fd fd = *(struct Socket_fd *) arg;
-    // 接收内容的长度, MSG_PEEK： 窥视传入的数据。 数据被复制到缓冲区中，但不会从输入队列中删除。
-    int receive_byte = recv(fd.fd, buf, N, 0);
-    // if(recvfrom(sockfd, buf, N, 0, (struct sockaddr *)&clientaddr, &addrlen) == -1)
-    if (receive_byte == -1) {
-        error_die(" recv error");
-    } else if (receive_byte == 0) {
-        error_die(" the client quite !");
+    struct Socket_connect fd = *(struct Socket_connect *) arg;
+    while (1) {
+        // 接收内容的长度, MSG_PEEK： 窥视传入的数据。 数据被复制到缓冲区中，但不会从输入队列中删除。
+        int receive_byte = recv(fd.acceptfd, buf, N, 0);
+        // if(recvfrom(sockfd, buf, N, 0, (struct sockaddr *)&clientaddr, &addrlen) == -1)
+        if (receive_byte == -1) {
+            error_die(" recv error");
+        }
+        if (strncmp(buf, "quit", 4) == 0) {
+            error_die("the client command quite close \n");
+        } else if (receive_byte == 0) {
+            printf("client quite");
+            pthread_exit(NULL);
+        }
+
+
+        // 打印接收的数据报文
+        printf("from client: %s:%d --> %s\n", inet_ntoa(fd.addr.sin_addr), ntohs(fd.addr.sin_port), buf);
+
+        // 拼接字符串 ，在结尾增加 *_*
+        strcat(buf, " -- *_*");
+
+        if (send(fd.acceptfd, buf, N, 0) == -1) {
+            error_die("send error");
+        }
+
+
     }
 
-    // 打印接收的数据报文
-    printf("from client: %s\n", buf);
-
-    // 拼接字符串 ，在结尾增加 *_*
-    strcat(buf, " -- *_*");
-
-    if (send(fd.fd, buf, strlen(buf), 0) == -1) {
-        error_die("send error");
-    }
 
     // 关闭连接
-//    close(fd);
+//    close(acceptfd);
 
-//    printf("hostname", gethostname(fd, sizeof()))
+//    printf("hostname", gethostname(acceptfd, sizeof()))
 
 }
 
@@ -94,7 +105,7 @@ int main(void) {
         // todo: 使用 fork 函数创建子进程， 父进程负责链接操作， 子进程负责与客户端通信
         pthread_t tid;
 
-        struct Socket_fd socket_fd = {client_fd};
+        struct Socket_connect socket_fd = {client_addr, client_fd};
 
         if ((tid = pthread_create(&tid, NULL, handle_request, &socket_fd)) != 0) {
             error_die("fork() fail;");
