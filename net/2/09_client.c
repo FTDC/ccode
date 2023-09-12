@@ -8,10 +8,8 @@
 #include <unistd.h> //close
 #include <string.h>
 
-int main(int argc, char const *argv[])
-{
-    if(argc < 3)
-    {
+int main(int argc, char const *argv[]) {
+    if (argc < 3) {
         fprintf(stderr, "Usage: %s <ip> <port>\n", argv[0]);
         exit(1);
     }
@@ -21,8 +19,7 @@ int main(int argc, char const *argv[])
     socklen_t addrlen = sizeof(serveraddr);
 
     //第一步：创建套接字
-    if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    {
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("fail to socket");
         exit(1);
     }
@@ -50,20 +47,17 @@ int main(int argc, char const *argv[])
 
     //第三步：进行通信
     char buf[32] = "";
-    while(1)
-    {
+    while (1) {
         fgets(buf, sizeof(buf), stdin);
         buf[strlen(buf) - 1] = '\0';
 
-        if(sendto(sockfd, buf, sizeof(buf), 0, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0)
-        {
+        if (sendto(sockfd, buf, sizeof(buf), 0, (struct sockaddr *) &serveraddr, sizeof(serveraddr)) < 0) {
             perror("fail to sendto");
             exit(1);
         }
 
         char text[32] = "";
-        if(recvfrom(sockfd, text, sizeof(text), 0, (struct sockaddr *)&serveraddr, &addrlen) < 0)
-        {
+        if (recvfrom(sockfd, text, sizeof(text), 0, (struct sockaddr *) &serveraddr, &addrlen) < 0) {
             perror("fail to recvfrom");
             exit(1);
         }

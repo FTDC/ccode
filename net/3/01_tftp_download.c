@@ -9,8 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-void do_download(int sockfd, struct sockaddr_in serveraddr)
-{
+void do_download(int sockfd, struct sockaddr_in serveraddr) {
     char filename[128] = "";
     printf("请输入要下载的文件名: ");
     scanf("%s", filename);
@@ -26,17 +25,14 @@ void do_download(int sockfd, struct sockaddr_in serveraddr)
 
     //构建给服务器发送的tftp指令并发送给服务器，例如：01test.txt0octet0
     text_len = sprintf(text, "%c%c%s%c%s%c", 0, 1, filename, 0, "octet", 0);
-    if(sendto(sockfd, text, text_len, 0, (struct sockaddr *)&serveraddr, addrlen) < 0)
-    {
+    if (sendto(sockfd, text, text_len, 0, (struct sockaddr *) &serveraddr, addrlen) < 0) {
         perror("fail to sendto");
         exit(1);
     }
 
-    while(1)
-    {
+    while (1) {
         //接收服务器发送过来的数据并处理
-        if((bytes = recvfrom(sockfd, text, sizeof(text), 0, (struct sockaddr *)&serveraddr, &addrlen)) < 0)
-        {
+        if ((bytes = recvfrom(sockfd, text, sizeof(text), 0, (struct sockaddr *) &serveraddr, &addrlen)) < 0) {
             perror("fail to recvfrom");
             exit(1);
         }
@@ -45,18 +41,13 @@ void do_download(int sockfd, struct sockaddr_in serveraddr)
         //printf("数据：%s\n", text+4);
 
         //判断操作码执行相应的处理
-        if(text[1] == 5)
-        {
-            printf("error: %s\n", text+4);
-            return ;
-        }
-        else if(text[1] == 3)
-        {
-            if(flags == 0)
-            {
+        if (text[1] == 5) {
+            printf("error: %s\n", text + 4);
+            return;
+        } else if (text[1] == 3) {
+            if (flags == 0) {
                 //创建文件
-                if((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
-                {
+                if ((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0) {
                     perror("fail to open");
                     exit(1);
                 }
@@ -64,50 +55,42 @@ void do_download(int sockfd, struct sockaddr_in serveraddr)
             }
 
             //对比编号和接收的数据大小并将文件内容写入文件
-            if((num+1 == ntohs(*(unsigned short *)(text+2))) && (bytes == 516))
-            {
-                num = ntohs(*(unsigned short *)(text+2));
-                if(write(fd, text + 4, bytes - 4) < 0)
-                {
+            if ((num + 1 == ntohs(*(unsigned short *) (text + 2))) && (bytes == 516)) {
+                num = ntohs(*(unsigned short *) (text + 2));
+                if (write(fd, text + 4, bytes - 4) < 0) {
                     perror("fail to write");
                     exit(1);
                 }
 
                 //当文件写入完毕后，给服务器发送ACK
                 text[1] = 4;
-                if(sendto(sockfd, text, 4, 0, (struct sockaddr *)&serveraddr, addrlen) < 0)
-                {
+                if (sendto(sockfd, text, 4, 0, (struct sockaddr *) &serveraddr, addrlen) < 0) {
                     perror("fail to sendto");
                     exit(1);
                 }
             }
-            //当最后一个数据接收完毕后，写入文件后退出函数
-            else if((num+1 == ntohs(*(unsigned short *)(text+2))) && (bytes < 516))
-            {
-                if(write(fd, text + 4, bytes - 4) < 0)
-                {
+                //当最后一个数据接收完毕后，写入文件后退出函数
+            else if ((num + 1 == ntohs(*(unsigned short *) (text + 2))) && (bytes < 516)) {
+                if (write(fd, text + 4, bytes - 4) < 0) {
                     perror("fail to write");
                     exit(1);
                 }
 
                 text[1] = 4;
-                if(sendto(sockfd, text, 4, 0, (struct sockaddr *)&serveraddr, addrlen) < 0)
-                {
+                if (sendto(sockfd, text, 4, 0, (struct sockaddr *) &serveraddr, addrlen) < 0) {
                     perror("fail to sendto");
                     exit(1);
                 }
 
                 printf("文件下载完毕\n");
-                return ;
+                return;
             }
         }
     }
 }
 
-int main(int argc, char const *argv[])
-{
-    if(argc < 2)
-    {
+int main(int argc, char const *argv[]) {
+    if (argc < 2) {
         fprintf(stderr, "Usage: %s <server_ip>\n", argv[0]);
         exit(1);
     }
@@ -116,8 +99,7 @@ int main(int argc, char const *argv[])
     struct sockaddr_in serveraddr;
 
     //创建套接字
-    if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    {
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         perror("fail to socket");
         exit(1);
     }
