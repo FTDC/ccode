@@ -94,7 +94,7 @@ void do_upload(int sockfd, struct sockaddr_in serveraddr) {
     char filename[N] = {};
     // 创建一个文件
     FILE *fp;
-    fp = fopen("test.txt", "w+");
+    fp = fopen("static_lib_test.txt", "w+");
     fprintf(fp, "%s\n", "filename tset.txt");
     fclose(fp);
 

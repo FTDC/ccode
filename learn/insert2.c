@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     mysql_init(&my_connection);
     if (mysql_real_connect(&my_connection, "localhost", 
-            "root", "root", "test", 0, NULL, 0)) {
+            "root", "root", "static_lib_test", 0, NULL, 0)) {
         printf("Connection success\n");
         
         res = mysql_query(&my_connection, "insert into children(fname, age) values ('Robot', 7)");

@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 //    int port = 8081;
     printf("port: %d\n", port);
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     server_addr.sin_port = htons(port);
 
 
@@ -138,6 +138,10 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+/**
+ * 处理请求
+ * @param http_fd
+ */
 void handle_request(int http_fd) {
     char buf[1024] = "";
 

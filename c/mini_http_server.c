@@ -13,7 +13,7 @@ const static char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\
 const static char http_index_html[] = 
 "<html><head><title>Congrats!</title></head>"
 "<body><h1>Welcome to our HTTP server demo!</h1>"
-"<p>This is a just small test page.</body></html>";
+"<p>This is a just small static_lib_test page.</body></html>";
 
 //解析到HTTP请求的文件后，发送本地文件系统中的文件
 //这里，我们处理对index文件的请求，发送我们预定好的html文件
